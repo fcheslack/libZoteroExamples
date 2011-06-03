@@ -215,7 +215,7 @@ class Zotero_Entry
       // Get all of the link elements
       foreach($entryNode->getElementsByTagName("link") as $linkNode){
           if($linkNode->getAttribute('rel') == "enclosure"){
-              $this->links[$linkNode->getAttribute('rel')][$linkNode->getAttribute('type')] = array(
+              $this->links['enclosure'][$linkNode->getAttribute('type')] = array(
                                           'href'=>$linkNode->getAttribute('href'), 
                                           'title'=>$linkNode->getAttribute('title'), 
                                           'length'=>$linkNode->getAttribute('length'));
@@ -1369,7 +1369,9 @@ class Zotero_Item extends Zotero_Entry
         
         //save raw Content node in case we need it
         if($entryNode->getElementsByTagName("content")->length > 0){
-            $this->content = $entryNode->getElementsByTagName("content")->item(0)->nodeValue;
+            $d = $entryNode->ownerDocument;
+            $this->contentNode = $entryNode->getElementsByTagName("content")->item(0);
+            $this->content = $d->saveXml($this->contentNode);
         }
         
         // Extract the itemId and itemType
@@ -1398,10 +1400,13 @@ class Zotero_Item extends Zotero_Entry
         if($contentType == 'application/json'){
             $this->apiObject = json_decode($contentNode->nodeValue, true);
             $this->etag = $contentNode->getAttribute('etag');
-            $this->creators = $this->apiObject['creators'];
+            if(isset($this->apiObject['creators'])){
+                $this->creators = $this->apiObject['creators'];
+            }
+            else{
+                $this->creators = array();
+            }
         }
-        
-        
     }
     
     public function get($key){
@@ -1493,12 +1498,13 @@ class Zotero_Item extends Zotero_Entry
         }
     }
     
+    /*
     public function downloadLink(){
         if(!$this->hasFile()){
             return false;
         }
-        
     }
+    */
     
     public function json(){
         return json_encode($this->apiObject());
@@ -1917,7 +1923,7 @@ class Zotero_Creator
     }
 }
 
-const LIBZOTERO_DEBUG = 1;
+const LIBZOTERO_DEBUG = 0;
 function libZoteroDebug($m){
     if(LIBZOTERO_DEBUG){
         echo $m;
@@ -2136,6 +2142,8 @@ class Zotero_Library
                                  'itemKey',
                                  'tag',
                                  'tagType',
+                                 'style',
+                                 'format',
                                  );
         //build simple api query parameters object
         if((!isset($passedParams['key'])) && $this->_apiKey){
@@ -2270,6 +2278,7 @@ class Zotero_Library
         $reqUrl = $this->apiRequestUrl($aparams) . $this->apiQueryString($aparams);
         libZoteroDebug( "\n" );
         libZoteroDebug( $reqUrl . "\n" );
+        //die;
         $response = $this->_request($reqUrl);
         if($response->isError()){
             throw new Exception("Error fetching items");
@@ -2310,6 +2319,11 @@ class Zotero_Library
             $this->items->addItem($item);
             return $item;
         }
+    }
+    
+    public function itemDownloadLink($itemKey){
+        $aparams = array('target'=>'item', 'itemKey'=>$itemKey, 'targetModifier'=>'file');
+        return $this->apiRequestUrl($aparams) . $this->apiQueryString($aparams);
     }
     
     public function writeUpdatedItem($item){

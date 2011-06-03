@@ -3,13 +3,14 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 </head>
 <body>
-
+<h1>Zotero Items</h1>
 <div id="feedContent">
-
 </div>
 
 </body>
 <script type="text/javascript">
-    $("#feedContent").load('/zoteroexamples/proxy.php');
+    jQuery(document).ready(function() {
+        jQuery("#feedContent").load('./embed.php?content=bib&style=apa&limit=5');
+    });
 </script>
 </html>

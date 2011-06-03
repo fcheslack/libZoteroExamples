@@ -59,13 +59,13 @@ class Zend_Gdata_App
       *
       * @see _majorProtocolVersion
       */
-    const DEFAULT_MAJOR_PROTOCOL_VERSION = 1;
+    const DEFAULT_MAJOR_PROTOCOL_VERSION = 3;
 
     /** Default minor protocol version.
       *
       * @see _minorProtocolVersion
       */
-    const DEFAULT_MINOR_PROTOCOL_VERSION = null;
+    const DEFAULT_MINOR_PROTOCOL_VERSION = 0;
 
     /**
      * Client object used to communicate

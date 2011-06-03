@@ -1,3 +1,22 @@
+<html>
+<body>
+<form>
+    <ul>
+    <li><input type="text" name="collectionKey"></input> CollectionKey</li>
+    <li><input type="text" name="limit"></input> Limit</li>
+    <li><input type="text" name="style"></input> Style</li>
+    <li>
+        <select name="content">
+            <option value="json">JSON</option>
+            <option value="html">html</option>
+            <option value="none">none</option>
+            <option value="bib">bib</option>
+        </select> Content
+    </li>
+    <li><input type="submit" /></li>
+    </ul>
+</form>
+
 <?php
 define('ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -6,6 +25,13 @@ set_include_path('.' . PATH_SEPARATOR . ROOT_DIR . '/library'
 
 require_once('zoteroconfig.php');
 require_once('library/libZoteroSingle.php');
+
+if(isset($_GET['collectionKey'])){
+    $collectionKey = $_GET['collectionKey'];
+}
+else{
+    die;
+}
 
 $library = new Zotero_Library($libraryType, $userID, $userSlug, $apiKey);
 
