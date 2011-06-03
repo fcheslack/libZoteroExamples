@@ -1,0 +1,58 @@
+html {
+    background: #eee;
+    color: #333;
+    font: 87.5%/1.6em "Lucida Grande", Tahoma, Verdana, sans-serif;
+}
+
+body {
+    background-color: #fff;
+    width: 840px;
+    padding: 1em 2em;
+    margin: 40px auto;
+    -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    border-radius: 10px;
+}
+
+header[role=banner] h1 {
+    font-size: 300%;
+}
+
+nav {
+    display:block;
+    border: 1px dotted #ccc;
+    border-width: 1px 0;
+    margin-bottom: 1em;
+}
+
+nav ul {
+    list-style:none;
+    margin-left:0;
+    padding-left:0;
+    font-size:0.9em;
+}
+
+nav li {
+    display:inline;
+}
+
+nav li:not(:last-child):after {
+    content: " · ";
+    color: #ccc;
+}
+
+nav a {
+    text-decoration:none;
+    font-weight:bold;
+}
+
+a:link,
+a:visited {
+    color: #38c;
+}
+
+a:hover,
+a:active {
+    color: #369;
+}
